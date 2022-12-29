@@ -16,7 +16,7 @@ sensor:
         route: ROUTE_NAME
 ```
 
-example `configuration.yml`:
+example `configuration.yaml`:
 
 ```yaml
 # adds sensor info for MBTA Predictions
@@ -58,6 +58,14 @@ sensor:
 ## How To Find depart_from/arrive_at/route
 As we're pulling these values from the MBTA API, the easiest method to find the values needed is to navigate to [MBTA Schedules Page](https://mbta.com/schedules). You'll see all of the routes available, so click the one you want to integrate.
 At the top of the screen you'll see the route name, which should be used as the route in your configuration (excluding any numbers that might appear before the name). Below that, you'll either see a table or a list of stops. Use those stop names as depart_from and arrive_to values.
+
+## Getting the Upcoming Departures with Templates
+If you want to get the upcoming departures through a template (e.g. in a Markdown card), you can use the following as a basis:
+```yaml
+{% for train in state_attr('sensor.mbta_jfk_umass_to_alewife', 'upcoming_departures') | from_json %}
+  {{ train.departure }}{{ train.departure }}{{ train.delay | iif("(delayed "~train.delay~" )", "") }}
+{% endfor %}
+```
 
 ## Future Plans
 * Create PR for custom component in the [Home Asistant Repo](https://github.com/home-assistant/home-assistant/tree/dev/homeassistant/components)
